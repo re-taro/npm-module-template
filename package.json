@@ -4,7 +4,7 @@
   "description": "Template for personal npm module projects",
   "main": "dist/index.js",
   "types": "types/index.d.ts",
-  "module": "dist/index.es.js",
+  "module": "dist/index.esm.js",
   "browser": "dist/library-name.js",
   "files": [
     "package.json",
@@ -46,7 +46,7 @@
     "@rollup/plugin-babel": "5.3.1",
     "@rollup/plugin-commonjs": "22.0.0",
     "@rollup/plugin-node-resolve": "13.3.0",
-    "@rollup/plugin-typescript": "8.3.2",
+    "@rollup/plugin-typescript": "8.3.3",
     "@typescript-eslint/eslint-plugin": "5.27.1",
     "@typescript-eslint/parser": "5.27.1",
     "eslint": "8.17.0",

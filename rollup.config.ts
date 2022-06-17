@@ -1,14 +1,11 @@
 import pluginNodeResolve from "@rollup/plugin-node-resolve";
 import pluginCommonjs from "@rollup/plugin-commonjs";
-import pluginTypescript from "@rollup/plugin-typescript";
 import { babel as pluginBabel } from "@rollup/plugin-babel";
 import { terser as pluginTerser } from "rollup-plugin-terser";
-
+import pluginTypescript from '@rollup/plugin-typescript'
 import * as path from "path";
-
 import camelCase from "lodash.camelcase";
 import upperFirst from "lodash.upperfirst";
-
 import pkg from "./package.json";
 
 const moduleName = upperFirst(camelCase(pkg.name.replace(/^\@.*\//, '')));
@@ -18,6 +15,8 @@ const banner = `/*!
   ${pkg.homepage}
   Released under the ${pkg.license} License.
 */`;
+
+const BABELRC = ".babelrc.js"
 
 export default [
   {
@@ -36,7 +35,7 @@ export default [
         format: 'iife',
         banner,
         plugins: [
-          terser(),
+          pluginTerser(),
         ],
       },
     ],
@@ -47,7 +46,7 @@ export default [
       }),
       pluginBabel({
         babelHelpers: "bundled",
-        configFile: path.resolve(__dirname, ".babelrc.js"),
+        configFile: path.resolve(__dirname, BABELRC),
       }),
       pluginNodeResolve({
         browser: true,
@@ -55,11 +54,11 @@ export default [
     ],
   },
   {
-    input: `src/${pkg.name.replace(/^\@.*\//, "")}.ts`,
+    input: `src/${pkg.name.replace(/^\@.*\//, "")}.ts`.replace('.ts', '.d.ts'),
     output: [
       {
         file: pkg.module,
-        format: "es",
+        format: "esm",
         sourcemap: "inline",
         banner,
         exports: "named",
@@ -70,10 +69,10 @@ export default [
       ...Object.keys(pkg.devDependencies || {}),
     ],
     plugins: [
-      pluginTypescript(),
+      pluginTypescript({ compilerOptions: { outDir: "types", declaration: true}}),
       pluginBabel({
         babelHelpers: "bundled",
-        configFile: path.resolve(__dirname, ".babelrc.js"),
+        configFile: path.resolve(__dirname, BABELRC),
       }),
     ],
   },
@@ -96,7 +95,7 @@ export default [
       pluginTypescript(),
       pluginBabel({
         babelHelpers: "bundled",
-        configFile: path.resolve(__dirname, ".babelrc.js"),
+        configFile: path.resolve(__dirname, BABELRC),
       }),
     ],
   },
